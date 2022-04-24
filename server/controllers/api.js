@@ -1,4 +1,5 @@
 const Post = require("../models/posts");
+const fs = require("fs");
 
 module.exports = class API {
   // fetch all posts
@@ -13,9 +14,17 @@ module.exports = class API {
 
   // fetch post by id
   static async fecthPostById(req, res) {
-    res.send("Fetch Post by ID");
+    const id = req.params.id;
+
+    try {
+      const post = await Post.findById(id);
+      res.status(200).json(post);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
   }
 
+  // Create post
   static async createPost(req, res) {
     const post = req.body;
     const imagename = req.file.filename;
@@ -31,11 +40,49 @@ module.exports = class API {
 
   // Update post
   static async updatePost(req, res) {
-    res.send("Update Post");
+    const id = req.params.id;
+    let new_image = "";
+
+    if (req.file) {
+      new_image = req.file.filename;
+
+      try {
+        fs.unlinkSync("./uploads/" + req.body.old_image);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      new_image = req.body.old_image;
+    }
+
+    new_image = req.body;
+    newPost.image = new_image;
+
+    try {
+      await Post.findByIdAndUpdate(id, newPost);
+      res.status(200).json({ message: 'Post updated successfully!' });
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
   }
 
   // Delete post
   static async deletePost(req, res) {
-    res.send("Delete Post");
+    const id = req.params.id;
+
+    try {
+      const result = await Post.findByIdAndDelete(id);
+
+      if (result.image != "") {
+        try {
+          fs.unlinkSync("./uploads/" + result.image);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      res.status(200).json({ message: "Post deleted successfully!" });
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
   }
 }
