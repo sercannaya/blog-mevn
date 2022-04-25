@@ -27,7 +27,7 @@ module.exports = class API {
   // Create post
   static async createPost(req, res) {
     const post = req.body;
-    const imagename = req.file.filename;
+    const imagename = req.filename;
     post.image = imagename;
 
     try {
