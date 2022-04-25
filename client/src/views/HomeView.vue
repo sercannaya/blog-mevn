@@ -7,7 +7,7 @@
         v-for="post in posts" 
         :key="post._id"
       >
-      <v-card class="pa-1">
+      <v-card class="pa-1" :to="{ name: 'post', params: { id: post.id } }">
         <v-img height="250" :src="`/${post.image}`"></v-img>
         <v-btn class="ml-4 mt-3" small outlined color="indigo">
           {{ post.category }}

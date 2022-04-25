@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView'
 import AddPostView from '../views/AddPostView'
+import PostView from '../views/PostView'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/add-post',
     name: 'add-post',
     component: AddPostView
+  },
+  {
+    path: '/post/:id',
+    name: 'post',
+    component: PostView
   },
   {
     path: '/about',
